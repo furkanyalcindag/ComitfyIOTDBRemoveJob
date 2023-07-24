@@ -2,12 +2,15 @@ package com.comitfy.rabbitmqflink;
 
 import com.comitfy.rabbitmqflink.service.IOTDBService;
 import com.comitfy.rabbitmqflink.service.RestApiClientService;
+import com.comitfy.rabbitmqflink.service.TelegramService;
 import org.apache.iotdb.rpc.IoTDBConnectionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.retry.annotation.EnableRetry;
+
+import java.io.File;
 
 
 @SpringBootApplication
@@ -19,6 +22,9 @@ public class RabbitmqApplication implements CommandLineRunner {
 
     @Autowired
     RestApiClientService restApiClientService;
+
+    @Autowired
+    TelegramService telegramService;
 
     public static void main(String[] args) throws IoTDBConnectionException {
 
@@ -71,6 +77,10 @@ public class RabbitmqApplication implements CommandLineRunner {
        // String hash =restApiClientService.getHash(args[0]);
 
        // iotdbService.streaming(hash);
+
+
+        /*File file = new File("C:/B46010C31A8C0ADE15AF7E14AF80855F.dat");
+        telegramService.sendFile(file);*/
 
     }
 

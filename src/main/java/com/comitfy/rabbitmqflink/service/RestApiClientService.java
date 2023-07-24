@@ -43,6 +43,9 @@ public class RestApiClientService {
     @Autowired
     APIConfiguration apiConfiguration;
 
+    @Autowired
+    TelegramService telegramService;
+
 
     @Retryable(
             maxAttempts = 3,
@@ -169,7 +172,7 @@ public class RestApiClientService {
             SessionDataSet sessionCountDataSet = session.executeQueryStatement("select count(val)  from root.ecg.*.*.sid" + ownSessionHash + ";");
 
 
-            log.info("column name {}",sessionMinDataSet.getColumnNames().get(0));
+            log.info("column name {}", sessionMinDataSet.getColumnNames().get(0));
             String sn = sessionMinDataSet.getColumnNames().get(0).split("\\.")[2];
             String own = sessionMinDataSet.getColumnNames().get(0).split("\\.")[3].split("own")[1];
 
@@ -213,12 +216,12 @@ public class RestApiClientService {
     }//Creating a JSONObject object
 
 
-    public void convertApiConsume(Session session, String ownSession,File file) throws NoSuchAlgorithmException {
+    public void convertApiConsume(Session session, String ownSession, File file) throws NoSuchAlgorithmException {
 
         String originalSession = ownSession;
 
         //hash_original
-        String[] sessionArray =originalSession.split("_");
+        String[] sessionArray = originalSession.split("_");
 
         //originalSession = getHash(ownSession);
 
@@ -227,8 +230,6 @@ public class RestApiClientService {
 
         ObjectMapper objectMapper = new ObjectMapper();
         JSONObject jsonForFile = createMeasurementJsonForFile(session, originalSession);
-
-
 
 
         JSONObject jsonObjectReadStreamHistory = (JSONObject) jsonForFile.get("ReadStreamHistory");
@@ -250,7 +251,6 @@ public class RestApiClientService {
         HttpHeaders headers = createHeaders(token);
 
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-
 
 
         //JSONObject jsonObjectRemoteData = new JSONObject();
@@ -321,10 +321,6 @@ public class RestApiClientService {
         jsonObjectRemoteData.add("RemotePatientMeasurement[addAttributes][" + i + "][value]", jsonObjectReadStreamHistory.get("sn").toString().toUpperCase());
 
 
-
-
-
-
         i++;
 
 
@@ -343,7 +339,6 @@ public class RestApiClientService {
         jsonObjectRemoteData.add("RemotePatientMeasurement[addAttributes][" + i + "][value]", jsonObjectReadStreamHistory.get("end"));
 
 
-
         i++;
 
 
@@ -357,8 +352,6 @@ public class RestApiClientService {
 
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(jsonObjectRemoteData, headers);
-
-
 
 
         ResponseEntity<ConverterDTO> measurementDTO =

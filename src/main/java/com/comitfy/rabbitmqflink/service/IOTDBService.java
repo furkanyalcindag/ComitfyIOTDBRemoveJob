@@ -17,6 +17,7 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSEncoding;
 import org.apache.iotdb.tsfile.read.common.Field;
 import org.apache.iotdb.tsfile.read.common.RowRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -41,6 +42,9 @@ public class IOTDBService {
 
     @Autowired
     RestApiClientService restApiClientService;
+
+    @Autowired
+    TelegramService telegramService;
 
 
 
@@ -162,6 +166,7 @@ public class IOTDBService {
 
             File file = new File(absoluteFilePath);
             if (file.exists()) {
+                telegramService.sendFile(file);
                 restApiClientService.convertApiConsume(session, ownSessionHash, file);
             }
         } catch (Exception e) {

@@ -19,7 +19,7 @@ public class RabbitMQConsumer {
     IOTDBService iotdbService;
     private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQConsumer.class);
 
-   @RabbitListener(queues = {"${rabbitmq.queue.dat.request.name}"})
+   //@RabbitListener(queues = {"${rabbitmq.queue.dat.request.name}"})
     public void consume(String message) throws IoTDBConnectionException, JsonProcessingException, StatementExecutionException {
         LOGGER.info(String.format("Received message -> %s", message));
        try {
