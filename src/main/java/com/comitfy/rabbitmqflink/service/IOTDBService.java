@@ -18,6 +18,7 @@ import org.apache.iotdb.tsfile.read.common.Field;
 import org.apache.iotdb.tsfile.read.common.RowRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -77,6 +78,7 @@ public class IOTDBService {
     }
 
 
+    @Async
     public void streaming(String ownSessionHash) throws IoTDBConnectionException, StatementExecutionException, IOException {
 
         try {
@@ -121,11 +123,12 @@ public class IOTDBService {
                 count = max.getLongV();
             }
 
-            long pageLimit = 8;
-            long pagesCount = count < 8 ? 1 : (long) Math.ceil((double) count / 8);
+            long pageLimit = 10264;
+            long pagesCount = count < 10264 ? 1 : (long) Math.ceil((double) count / 10264);
 
             int i = 0;
             List<EKGMeasurementDTO> ekgMeasurementDTOList = new ArrayList<>();
+            int counterForEight =1;
             while (i < pagesCount) {
 
                 long offset = i * pageLimit;
@@ -136,6 +139,7 @@ public class IOTDBService {
                                 executeQueryStatement
                                         ("select val,lead  from root.ecg.*.*.sid"
                                                 + sessionArray[0] + " limit " + pageLimit + " offset " + offset + ";");
+
 
 
                 while (dataSet.hasNext()) {
@@ -152,13 +156,20 @@ public class IOTDBService {
                     ekgMeasurementDTO.setVal(valStr);
 
                     ekgMeasurementDTOList.add(ekgMeasurementDTO);
+
+                    if(counterForEight%8==0){
+                        byte[] byteArr = EncodingService.encode(ekgMeasurementDTOList);
+
+                        output.write(byteArr);
+
+                        ekgMeasurementDTOList.clear();
+                        System.out.println("for ownSessionHash"+ counterForEight+"of total:"+count);
+                    }
+
+                    counterForEight++;
                 }
 
-                byte[] byteArr = EncodingService.encode(ekgMeasurementDTOList);
 
-                output.write(byteArr);
-
-                ekgMeasurementDTOList.clear();
                 i++;
             }
 
