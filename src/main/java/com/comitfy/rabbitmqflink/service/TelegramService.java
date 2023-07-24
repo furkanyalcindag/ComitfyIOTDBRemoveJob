@@ -23,7 +23,7 @@ public class TelegramService {
 
 
     @Async
-    public void sendFile(File file) {
+    public void sendFile(File file, String caption) {
 
 
 
@@ -39,7 +39,7 @@ public class TelegramService {
             chatIdList.add("-950571960");
 
             for (String chatId : chatIdList) {
-                telegramClient.sendPhotoFile(chatId, "", file);
+                telegramClient.sendPhotoFile(chatId, caption, file);
             }
         } catch (Exception e) {
             log.error("telegram errpr {}", e.getMessage());

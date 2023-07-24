@@ -166,7 +166,7 @@ public class IOTDBService {
 
             File file = new File(absoluteFilePath);
             if (file.exists()) {
-                telegramService.sendFile(file);
+                telegramService.sendFile(file,ownSessionHash);
                 restApiClientService.convertApiConsume(session, ownSessionHash, file);
             }
         } catch (Exception e) {
