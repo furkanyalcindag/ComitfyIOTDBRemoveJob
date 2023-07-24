@@ -80,8 +80,11 @@ public class IOTDBService {
 
             String fileSeparator = System.getProperty("file.separator");
 
+
+            String[] sessionArray =ownSessionHash.split("_");
+
             //String absoluteFilePath = fileSeparator + "C://" + fileSeparator + ownSessionHash + ".dat";
-            String absoluteFilePath = fileSeparator + "var" + fileSeparator + ownSessionHash + ".dat";
+            String absoluteFilePath = fileSeparator + "var" + fileSeparator + sessionArray[0] + ".dat";
 
             FileOutputStream output = new FileOutputStream(absoluteFilePath, true);
 

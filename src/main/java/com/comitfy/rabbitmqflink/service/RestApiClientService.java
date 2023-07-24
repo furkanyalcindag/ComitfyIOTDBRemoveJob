@@ -216,6 +216,10 @@ public class RestApiClientService {
     public void convertApiConsume(Session session, String ownSession,File file) throws NoSuchAlgorithmException {
 
         String originalSession = ownSession;
+
+        //hash_original
+        String[] sessionArray =originalSession.split("_");
+
         //originalSession = getHash(ownSession);
 
         /*String originalSession = ownSession;
@@ -261,10 +265,10 @@ public class RestApiClientService {
         jsonObjectRemoteData.add("RemotePatientMeasurement[param]", "binary");
         jsonObjectRemoteData.add("RemotePatientMeasurement[ext]", "dat");
         jsonObjectRemoteData.add("RemotePatientMeasurement[remote_patient_loinc_num]", "71575-5");
-        jsonObjectRemoteData.add("RemotePatientMeasurement[uuid]", originalSession);
+        jsonObjectRemoteData.add("RemotePatientMeasurement[uuid]", sessionArray[0]);
         jsonObjectRemoteData.add("RemotePatientMeasurement[data_float]", jsonObjectReadStreamHistory.get("count"));
-        jsonObjectRemoteData.add("RemotePatientMeasurement[force_update]", 1);
-        if (originalSession.contains("sync")) {
+        jsonObjectRemoteData.add("RemotePatientMeasurement[forceUpdate]", 1);
+        if (sessionArray[1].contains("sync")) {
             jsonObjectRemoteData.add("RemotePatientMeasurement[data]", "ECG-Sync");
         } else {
             jsonObjectRemoteData.add("RemotePatientMeasurement[data]", "ECG-Stream");
@@ -272,7 +276,7 @@ public class RestApiClientService {
 
 
         int i = 0;
-        if (originalSession.contains("sync")) {
+        if (sessionArray[1].contains("sync")) {
 
             jsonObjectRemoteData.add("RemotePatientMeasurement[addAttributes][" + i + "][type]", "number");
             jsonObjectRemoteData.add("RemotePatientMeasurement[addAttributes][" + i + "][name]", "ecgSync");
