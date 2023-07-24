@@ -1,6 +1,4 @@
-package com.comitfy.rabbitmq;
-
-import lombok.Data;
+package com.comitfy.rabbitmqflink;
 
 
 public enum ActionType {

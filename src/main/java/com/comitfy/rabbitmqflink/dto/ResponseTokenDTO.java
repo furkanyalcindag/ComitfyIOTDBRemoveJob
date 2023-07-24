@@ -1,4 +1,4 @@
-package com.comitfy.rabbitmq.dto;
+package com.comitfy.rabbitmqflink.dto;
 
 import lombok.Data;
 

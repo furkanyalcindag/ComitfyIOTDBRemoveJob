@@ -1,4 +1,4 @@
-package com.comitfy.rabbitmq.configuration;
+package com.comitfy.rabbitmqflink.configuration;
 
 import org.springframework.amqp.core.*;
 import org.springframework.beans.factory.annotation.Value;

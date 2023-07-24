@@ -1,4 +1,4 @@
-package com.comitfy.rabbitmq.configuration;
+package com.comitfy.rabbitmqflink.configuration;
 
 import org.apache.iotdb.rpc.IoTDBConnectionException;
 import org.apache.iotdb.session.Session;
@@ -12,7 +12,8 @@ public class IoTDBConnectionManager {
         session = new Session(host, Integer.parseInt(port), username, password);
     }
 
-    public synchronized Session getSession() {
+    public synchronized Session getSession() throws IoTDBConnectionException {
+        session.open();
         return session;
     }
 

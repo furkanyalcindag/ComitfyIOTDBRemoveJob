@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.comitfy</groupId>
-	<artifactId>rabbitmq</artifactId>
+	<artifactId>rabbitmqflink</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>rabbitmq</name>
 	<description>rabbitmq</description>
@@ -87,7 +87,29 @@
 
 
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+
+
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
+
+
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+
+
+
+
 
 
 
@@ -107,6 +129,10 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
+
+
+
 		</plugins>
 	</build>
 

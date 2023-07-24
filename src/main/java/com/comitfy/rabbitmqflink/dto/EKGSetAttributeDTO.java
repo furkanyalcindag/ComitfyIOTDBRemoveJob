@@ -1,8 +1,6 @@
-package com.comitfy.rabbitmq.dto;
+package com.comitfy.rabbitmqflink.dto;
 
 import lombok.Data;
-
-import java.math.BigDecimal;
 
 @Data
 public class EKGSetAttributeDTO {
