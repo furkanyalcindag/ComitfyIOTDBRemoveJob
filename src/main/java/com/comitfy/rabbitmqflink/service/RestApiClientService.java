@@ -229,7 +229,7 @@ public class RestApiClientService {
         originalSession = getHash(ownSession);*/
 
         ObjectMapper objectMapper = new ObjectMapper();
-        JSONObject jsonForFile = createMeasurementJsonForFile(session, originalSession);
+        JSONObject jsonForFile = createMeasurementJsonForFile(session, sessionArray[0]);
 
 
         JSONObject jsonObjectReadStreamHistory = (JSONObject) jsonForFile.get("ReadStreamHistory");

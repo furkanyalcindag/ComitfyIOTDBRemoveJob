@@ -96,10 +96,10 @@ public class IOTDBService {
             long endTS = 0;
             long count = 0;
 
-            SessionDataSet sessionMinDataSet = session.executeQueryStatement("select min_time(val)  from root.ecg.*.*.sid" + ownSessionHash + ";");
-            SessionDataSet sessionMaxDataSet = session.executeQueryStatement("select max_time(val)  from root.ecg.*.*.sid" + ownSessionHash + ";");
+            SessionDataSet sessionMinDataSet = session.executeQueryStatement("select min_time(val)  from root.ecg.*.*.sid" + sessionArray[0] + ";");
+            SessionDataSet sessionMaxDataSet = session.executeQueryStatement("select max_time(val)  from root.ecg.*.*.sid" + sessionArray[0] + ";");
 
-            SessionDataSet sessionCountDataSet = session.executeQueryStatement("select count(val)  from root.ecg.*.*.sid" + ownSessionHash + ";");
+            SessionDataSet sessionCountDataSet = session.executeQueryStatement("select count(val)  from root.ecg.*.*.sid" + sessionArray[0] + ";");
 
             log.info("column name {}", sessionMinDataSet.getColumnNames().get(0));
             String sn = sessionMinDataSet.getColumnNames().get(0).split("\\.")[2];
@@ -135,7 +135,7 @@ public class IOTDBService {
                         session.
                                 executeQueryStatement
                                         ("select val,lead  from root.ecg.*.*.sid"
-                                                + ownSessionHash + " limit " + pageLimit + " offset " + offset + ";");
+                                                + sessionArray[0] + " limit " + pageLimit + " offset " + offset + ";");
 
 
                 while (dataSet.hasNext()) {
