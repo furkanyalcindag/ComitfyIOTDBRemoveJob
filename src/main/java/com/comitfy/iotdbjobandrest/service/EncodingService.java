@@ -1,6 +1,6 @@
-package com.comitfy.rabbitmqflink.service;
+package com.comitfy.iotdbjobandrest.service;
 
-import com.comitfy.rabbitmqflink.dto.EKGMeasurementDTO;
+import com.comitfy.iotdbjobandrest.dto.EKGMeasurementDTO;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.stereotype.Service;
 

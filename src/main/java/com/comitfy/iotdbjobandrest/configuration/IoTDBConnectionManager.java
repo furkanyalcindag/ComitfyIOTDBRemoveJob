@@ -1,4 +1,4 @@
-package com.comitfy.rabbitmqflink.configuration;
+package com.comitfy.iotdbjobandrest.configuration;
 
 import org.apache.iotdb.rpc.IoTDBConnectionException;
 import org.apache.iotdb.session.Session;

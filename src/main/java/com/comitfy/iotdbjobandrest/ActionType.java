@@ -1,4 +1,4 @@
-package com.comitfy.rabbitmqflink;
+package com.comitfy.iotdbjobandrest;
 
 
 public enum ActionType {

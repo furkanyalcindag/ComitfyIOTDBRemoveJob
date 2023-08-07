@@ -1,4 +1,4 @@
-package com.comitfy.rabbitmqflink.dto;
+package com.comitfy.iotdbjobandrest.dto;
 
 import lombok.Data;
 

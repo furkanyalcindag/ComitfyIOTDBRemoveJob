@@ -1,20 +1,20 @@
-package com.comitfy.rabbitmqflink;
+package com.comitfy.iotdbjobandrest;
 
-import com.comitfy.rabbitmqflink.service.IOTDBService;
-import com.comitfy.rabbitmqflink.service.RestApiClientService;
-import com.comitfy.rabbitmqflink.service.TelegramService;
+import com.comitfy.iotdbjobandrest.service.IOTDBService;
+import com.comitfy.iotdbjobandrest.service.RestApiClientService;
+import com.comitfy.iotdbjobandrest.service.TelegramService;
 import org.apache.iotdb.rpc.IoTDBConnectionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.retry.annotation.EnableRetry;
-
-import java.io.File;
 
 
 @SpringBootApplication
 @EnableRetry
+@EnableConfigurationProperties
 public class RabbitmqApplication implements CommandLineRunner {
 
     @Autowired

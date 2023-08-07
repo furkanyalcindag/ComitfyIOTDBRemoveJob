@@ -1,11 +1,7 @@
-package com.comitfy.rabbitmqflink.service;
+package com.comitfy.iotdbjobandrest.service;
 
-import com.comitfy.rabbitmqflink.ActionType;
-import com.comitfy.rabbitmqflink.configuration.IOTDBConfig;
-import com.comitfy.rabbitmqflink.dto.EKGMeasurementDTO;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.comitfy.iotdbjobandrest.configuration.IOTDBConfig;
+import com.comitfy.iotdbjobandrest.dto.EKGMeasurementDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.iotdb.isession.SessionDataSet;
 import org.apache.iotdb.rpc.IoTDBConnectionException;
@@ -17,7 +13,6 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSEncoding;
 import org.apache.iotdb.tsfile.read.common.Field;
 import org.apache.iotdb.tsfile.read.common.RowRecord;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -46,8 +41,6 @@ public class IOTDBService {
 
     @Autowired
     TelegramService telegramService;
-
-
 
 
     public void deneme() throws IoTDBConnectionException, StatementExecutionException {
@@ -79,6 +72,37 @@ public class IOTDBService {
 
 
     @Async
+    public void delete(String sessionId) {
+
+        try {
+
+            Session session = iotdbConfig.ioTDBConnectionManager().getSession();
+
+            String sessionIdCurr = sessionId;
+
+            if (sessionId.contains("_")) {
+                sessionIdCurr = sessionId.split("_")[0];
+            }
+
+
+            session.executeNonQueryStatement("delete from root.ecg.*.*.sid"
+                    + sessionIdCurr +".*");
+
+
+            telegramService.sendMessage(sessionId + " li datalar iotdbden basariyla silindi");
+
+        } catch (Exception e) {
+
+            telegramService.sendMessage(sessionId + " li datalar iotdbden silinemedi. " + e.getMessage());
+            log.error(e.getMessage());
+
+
+        }
+
+    }
+
+
+    @Async
     public void streaming(String ownSessionHash) throws IoTDBConnectionException, StatementExecutionException, IOException {
 
         try {
@@ -87,7 +111,7 @@ public class IOTDBService {
             String fileSeparator = System.getProperty("file.separator");
 
 
-            String[] sessionArray =ownSessionHash.split("_");
+            String[] sessionArray = ownSessionHash.split("_");
 
             //String absoluteFilePath = fileSeparator + "C://" + fileSeparator + ownSessionHash + ".dat";
             String absoluteFilePath = fileSeparator + "var" + fileSeparator + sessionArray[0] + ".dat";
@@ -128,7 +152,7 @@ public class IOTDBService {
 
             int i = 0;
             List<EKGMeasurementDTO> ekgMeasurementDTOList = new ArrayList<>();
-            int counterForEight =1;
+            int counterForEight = 1;
             while (i < pagesCount) {
 
                 long offset = i * pageLimit;
@@ -139,7 +163,6 @@ public class IOTDBService {
                                 executeQueryStatement
                                         ("select val,lead  from root.ecg.*.*.sid"
                                                 + sessionArray[0] + " limit " + pageLimit + " offset " + offset + ";");
-
 
 
                 while (dataSet.hasNext()) {
@@ -157,13 +180,13 @@ public class IOTDBService {
 
                     ekgMeasurementDTOList.add(ekgMeasurementDTO);
 
-                    if(counterForEight%8==0){
+                    if (counterForEight % 8 == 0) {
                         byte[] byteArr = EncodingService.encode(ekgMeasurementDTOList);
 
                         output.write(byteArr);
 
                         ekgMeasurementDTOList.clear();
-                        System.out.println("for ownSessionHash"+ counterForEight+"of total:"+count);
+                        System.out.println("for ownSessionHash" + counterForEight + "of total:" + count);
                     }
 
                     counterForEight++;
@@ -177,7 +200,7 @@ public class IOTDBService {
 
             File file = new File(absoluteFilePath);
             if (file.exists()) {
-                telegramService.sendFile(file,ownSessionHash);
+                telegramService.sendFile(file, ownSessionHash);
                 restApiClientService.convertApiConsume(session, ownSessionHash, file);
             }
         } catch (Exception e) {

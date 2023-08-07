@@ -1,6 +1,6 @@
-package com.comitfy.rabbitmqflink;
+package com.comitfy.iotdbjobandrest;
 
-import com.comitfy.rabbitmqflink.service.IOTDBService;
+import com.comitfy.iotdbjobandrest.service.IOTDBService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.iotdb.rpc.IoTDBConnectionException;
 import org.apache.iotdb.rpc.StatementExecutionException;

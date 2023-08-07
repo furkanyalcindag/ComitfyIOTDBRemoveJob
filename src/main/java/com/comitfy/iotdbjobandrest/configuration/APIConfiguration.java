@@ -1,4 +1,4 @@
-package com.comitfy.rabbitmqflink.configuration;
+package com.comitfy.iotdbjobandrest.configuration;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;

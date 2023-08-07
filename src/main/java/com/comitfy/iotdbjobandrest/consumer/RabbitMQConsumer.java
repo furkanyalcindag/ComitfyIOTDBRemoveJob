@@ -1,6 +1,6 @@
-package com.comitfy.rabbitmqflink.consumer;
+package com.comitfy.iotdbjobandrest.consumer;
 
-import com.comitfy.rabbitmqflink.service.IOTDBService;
+import com.comitfy.iotdbjobandrest.service.IOTDBService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.iotdb.rpc.IoTDBConnectionException;
 import org.apache.iotdb.rpc.StatementExecutionException;
@@ -19,7 +19,7 @@ public class RabbitMQConsumer {
     IOTDBService iotdbService;
     private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQConsumer.class);
 
-   @RabbitListener(queues = {"${rabbitmq.queue.dat.request.name}"})
+   //@RabbitListener(queues = {"${rabbitmq.queue.dat.request.name}"})
     public void consume(String message) throws IoTDBConnectionException, JsonProcessingException, StatementExecutionException {
         LOGGER.info(String.format("Received message -> %s", message));
        try {
