@@ -18,7 +18,7 @@ public class TelegramController {
     TelegramClient telegramClient;
 
 
-    @PostMapping("/sendPhoto/file")
+   /* @PostMapping("/sendPhoto/file")
     public void sendPhotoFileToTelegramGroup(@RequestParam("caption") String caption, @RequestPart("photo") File photo) throws Exception {
         List <String> chatIdList = new ArrayList();
         chatIdList.add("-950571960");
@@ -26,6 +26,6 @@ public class TelegramController {
         for(String chatId: chatIdList){
             telegramClient.sendPhotoFile(chatId,caption, photo);
         }
-    }
+    }*/
 
 }

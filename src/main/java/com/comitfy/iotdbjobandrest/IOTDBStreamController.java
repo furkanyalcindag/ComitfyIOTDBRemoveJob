@@ -1,5 +1,6 @@
 package com.comitfy.iotdbjobandrest;
 
+import com.comitfy.iotdbjobandrest.dto.BaseResponseDTO;
 import com.comitfy.iotdbjobandrest.dto.RemoveDTO;
 import com.comitfy.iotdbjobandrest.dto.StreamDTO;
 import com.comitfy.iotdbjobandrest.service.IOTDBService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 @RestController
 @AllArgsConstructor
@@ -28,9 +30,10 @@ public class IOTDBStreamController {
 
 
     @PostMapping("/start-streaming")
-    public ResponseEntity<String> getSecureData(@RequestHeader("Authorization") String token,@RequestBody StreamDTO removeDTO) throws IoTDBConnectionException, IOException, StatementExecutionException {
+    public ResponseEntity<BaseResponseDTO> getSecureData(@RequestHeader("Authorization") String token,@RequestBody StreamDTO removeDTO) throws IoTDBConnectionException, IOException, StatementExecutionException {
         // Tokenı alınan header'dan çıkart
         String jwtToken = token.substring("Bearer ".length());
+        BaseResponseDTO baseResponseDTO = new BaseResponseDTO();
 
         // Tokenı doğrula
 
@@ -40,12 +43,44 @@ public class IOTDBStreamController {
 
             iotdbService.streaming(removeDTO.getSessionId());
 
+            baseResponseDTO.setSuccess(Boolean.TRUE);
+            baseResponseDTO.setMessage("Streaming işlemi başladı");
 
             // Kullanıcı adını kullanarak istenilen işlemi yap
             // Örnek olarak, kullanıcının özel verilerini çek veya işlem yapabilirsiniz.
 
-            return  new ResponseEntity<>("Streaming işlemi başladı", HttpStatus.UNAUTHORIZED);
+            return  new ResponseEntity<>(baseResponseDTO, HttpStatus.UNAUTHORIZED);
         } else {
+            baseResponseDTO.setSuccess(Boolean.FALSE);
+            baseResponseDTO.setMessage("Kullanıcı doğrulama başarısız");
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @PostMapping("/trial-streaming")
+    public ResponseEntity<BaseResponseDTO> getSecureDataTrial(@RequestHeader("Authorization") String token,@RequestBody StreamDTO removeDTO) throws IoTDBConnectionException, IOException, StatementExecutionException, NoSuchAlgorithmException {
+        // Tokenı alınan header'dan çıkart
+        String jwtToken = token.substring("Bearer ".length());
+        BaseResponseDTO baseResponseDTO = new BaseResponseDTO();
+
+        // Tokenı doğrula
+
+        if (jwtTokenUtil.validateToken(jwtToken)) {
+            // Token geçerliyse kullanıcıyı elde et
+            String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+
+            iotdbService.denemeService(removeDTO.getSessionId());
+
+            baseResponseDTO.setSuccess(Boolean.TRUE);
+            baseResponseDTO.setMessage("Streaming işlemi başladı");
+
+            // Kullanıcı adını kullanarak istenilen işlemi yap
+            // Örnek olarak, kullanıcının özel verilerini çek veya işlem yapabilirsiniz.
+
+            return  new ResponseEntity<>(baseResponseDTO, HttpStatus.UNAUTHORIZED);
+        } else {
+            baseResponseDTO.setSuccess(Boolean.FALSE);
+            baseResponseDTO.setMessage("Kullanıcı doğrulama başarısız");
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
     }

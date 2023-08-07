@@ -6,5 +6,5 @@ import lombok.Data;
 public class BaseResponseDTO {
 
     private Boolean success;
-
+    private String message;
 }

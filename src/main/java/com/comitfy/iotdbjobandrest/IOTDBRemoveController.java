@@ -1,5 +1,6 @@
 package com.comitfy.iotdbjobandrest;
 
+import com.comitfy.iotdbjobandrest.dto.BaseResponseDTO;
 import com.comitfy.iotdbjobandrest.dto.RemoveDTO;
 import com.comitfy.iotdbjobandrest.service.IOTDBService;
 import com.comitfy.iotdbjobandrest.util.JwtTokenUtil;
@@ -21,9 +22,10 @@ public class IOTDBRemoveController {
 
 
     @PostMapping("/remove")
-    public ResponseEntity<String> getSecureData(@RequestHeader("Authorization") String token,@RequestBody RemoveDTO removeDTO) {
+    public ResponseEntity<BaseResponseDTO> getSecureData(@RequestHeader("Authorization") String token,@RequestBody RemoveDTO removeDTO) {
         // Tokenı alınan header'dan çıkart
         String jwtToken = token.substring("Bearer ".length());
+        BaseResponseDTO baseResponseDTO = new BaseResponseDTO();
 
         // Tokenı doğrula
 
@@ -32,14 +34,18 @@ public class IOTDBRemoveController {
             String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
 
             iotdbService.delete(removeDTO.getSessionId());
+            baseResponseDTO.setSuccess(Boolean.TRUE);
+            baseResponseDTO.setMessage("Silme işlemi başladı");
 
 
             // Kullanıcı adını kullanarak istenilen işlemi yap
             // Örnek olarak, kullanıcının özel verilerini çek veya işlem yapabilirsiniz.
 
-            return  new ResponseEntity<>("Silme işlemi başladı", HttpStatus.UNAUTHORIZED);
+            return  new ResponseEntity<>(baseResponseDTO, HttpStatus.UNAUTHORIZED);
         } else {
-            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+            baseResponseDTO.setSuccess(Boolean.FALSE);
+            baseResponseDTO.setMessage("Kullanıcı doğrulama başarısız");
+            return new ResponseEntity<>(baseResponseDTO, HttpStatus.UNAUTHORIZED);
         }
     }
 }

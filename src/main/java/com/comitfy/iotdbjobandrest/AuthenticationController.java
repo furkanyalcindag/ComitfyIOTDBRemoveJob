@@ -1,5 +1,6 @@
 package com.comitfy.iotdbjobandrest;
 
+import com.comitfy.iotdbjobandrest.dto.BaseResponseDTO;
 import com.comitfy.iotdbjobandrest.dto.UserDTO;
 import com.comitfy.iotdbjobandrest.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,17 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserDTO user) {
+    public ResponseEntity<BaseResponseDTO> login(@RequestBody UserDTO user) {
         String token = authenticationService.login(user);
+        BaseResponseDTO baseResponseDTO = new BaseResponseDTO();
         if (token != null) {
-            return ResponseEntity.ok(token);
+            baseResponseDTO.setMessage(token);
+            baseResponseDTO.setSuccess(Boolean.TRUE);
+            return ResponseEntity.ok(baseResponseDTO);
         } else {
-            return ResponseEntity.badRequest().body("Kullanıcı adı veya parola hatalı.");
+            baseResponseDTO.setMessage("Kullanıcı doğrulama başarısız");
+            baseResponseDTO.setSuccess(Boolean.FALSE);
+            return ResponseEntity.badRequest().body(baseResponseDTO);
         }
     }
 }

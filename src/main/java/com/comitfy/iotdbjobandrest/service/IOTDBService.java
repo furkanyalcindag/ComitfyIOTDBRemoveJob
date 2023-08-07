@@ -2,6 +2,7 @@ package com.comitfy.iotdbjobandrest.service;
 
 import com.comitfy.iotdbjobandrest.configuration.IOTDBConfig;
 import com.comitfy.iotdbjobandrest.dto.EKGMeasurementDTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.iotdb.isession.SessionDataSet;
 import org.apache.iotdb.rpc.IoTDBConnectionException;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -41,6 +43,9 @@ public class IOTDBService {
 
     @Autowired
     TelegramService telegramService;
+
+    @Autowired
+    RestApiClientForMeasurementService restApiClientForMeasurementService;
 
 
     public void deneme() throws IoTDBConnectionException, StatementExecutionException {
@@ -86,7 +91,7 @@ public class IOTDBService {
 
 
             session.executeNonQueryStatement("delete from root.ecg.*.*.sid"
-                    + sessionIdCurr +".*");
+                    + sessionIdCurr + ".*");
 
 
             telegramService.sendMessage(sessionId + " li datalar iotdbden basariyla silindi");
@@ -201,12 +206,22 @@ public class IOTDBService {
             File file = new File(absoluteFilePath);
             if (file.exists()) {
                 telegramService.sendFile(file, ownSessionHash);
+                restApiClientForMeasurementService.convertApiConsume(session, ownSessionHash);
                 restApiClientService.convertApiConsume(session, ownSessionHash, file);
             }
         } catch (Exception e) {
             log.error(e.getMessage());
         }
 
+    }
+
+
+    public void denemeService(String hash) throws IoTDBConnectionException, NoSuchAlgorithmException, JsonProcessingException {
+
+        Session session = iotdbConfig.ioTDBConnectionManager().getSession();
+
+
+        restApiClientForMeasurementService.convertApiConsume(session, hash);
     }
 
 
