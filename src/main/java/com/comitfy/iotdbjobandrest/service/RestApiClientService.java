@@ -64,7 +64,7 @@ public class RestApiClientService {
                 set("x-locale", "en-gb");
                 set("ContentType", "application/json");
                 set("Accept", "application/json");
-                set("x-api", "v8");
+                set("x-api", "v9");
                 set("x-encrypted", "0");
             }};
 
@@ -97,7 +97,7 @@ public class RestApiClientService {
             set("x-locale", "en-gb");
             set("ContentType", "application/json");
             set("Accept", "application/json");
-            set("x-api", "v8");
+            set("x-api", "v9");
             set("x-encrypted", "0");
         }};
     }
